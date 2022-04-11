@@ -1,9 +1,12 @@
 const express = require('express');
 const path = require('path')
 const authRoutes = require('./auth/auth.routes');
-const { fork } = require('child_process')
+const { fork } = require('child_process');
+const { infoLog } = require('../../middlewares/logger');
 const router = express.Router();
+
 //Routes
+router.use(infoLog)
 router.use('/auth', authRoutes);
 
 router.get('/randoms', (req, res) => {
