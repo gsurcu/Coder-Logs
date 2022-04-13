@@ -1,22 +1,22 @@
-const { ProductosDaoMongoDb } = require('../models/daos/Products.dao')
-const productosApi = new ProductosDaoMongoDb("productos");
+const ProductsDao = require('../models/daos/Products.dao')
+const productosApi = new ProductsDao("productos");
 
 const listarProductosPorIdController = async (req, res) => {
   const { id } = req.params;
   if (id) {
-    console.log(id)
-    const producto = await productosApi.listar(id);
+    // console.log(id)
+    const producto = await productosApi.getById(id);
     return res.status(200).json(producto);
   }
-  const producto = await productosApi.listarAll();
+  const producto = await productosApi.getAll();
   return res.status(200).json(producto);
 };
 
 const guardarProductoController = async (req, res) => {
-  const {title, price, thumbnail} = req.body;
+  const {title, price, imgUrl, code, description, stock} = req.body;
   
-  if (title && price && thumbnail) {
-    const nuevoProducto = await productosApi.guardar({title, price,imageURL: thumbnail} );
+  if (title && price && imgUrl) {
+    const nuevoProducto = await productosApi.saveItem({title, price, imgUrl, code, description, stock } );
     return res.status(200).redirect("/");
   }
 
@@ -25,10 +25,10 @@ const guardarProductoController = async (req, res) => {
 
 const actualizarProductoController = async (req, res) => {
   const { id } = req.params;
-  const {title, price, thumbnail} = req.body;
+  const {title, price, imgUrl, code, description, stock} = req.body;
   
   if (title && price && thumbnail) {
-    const productoActualizado = await productosApi.actualizar({title, price, thumbnail}, id);
+    const productoActualizado = await productosApi.updateItem({title, price, imgUrl, code, description, stock}, id);
     if (productoActualizado) {
       return res.status(200).send("Producto actualizado");
     }
@@ -42,7 +42,7 @@ const eliminarProductoController = async (req, res) => {
   const { id } = req.params;
   
   if (id) {
-    const productoEliminado = await productosApi.eliminar(id);
+    const productoEliminado = await productosApi.delItem(id);
     if (productoEliminado) {
       return res.status(200).json({mensaje: "Producto eliminado"});
     }
@@ -55,5 +55,4 @@ module.exports = {
   guardarProductoController,
   actualizarProductoController,
   eliminarProductoController,
-  productosApi
 };

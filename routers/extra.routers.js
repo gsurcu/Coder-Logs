@@ -3,11 +3,11 @@ const express = require('express');
 const auth = require('../middlewares/auth');
 const infoRoute = require('./info/info.routes');
 const compression = require('compression');
-const { infoLog } = require('../middlewares/logger');
+const ProductsDao = require('../models/daos/Products.dao')
 const PORT = process.argv[2]
 const router = express.Router();
 
-router.use(infoLog);
+const productos = new ProductsDao('productos')
 
 router.get('/', (req, res) => {
   const user = req.user;
@@ -28,8 +28,8 @@ router.get('/datos', (req, res) => {
 });
 
 router.get('/profile', auth, async (req, res) => {
-  const user = req.user;
-  res.render('profile', { sessionUser: user });
+  const user = req.user;// console.log(user)
+  res.render('profile', { sessionUser: user, productos: await productos.getAll() });
 });
 
 router.get('/logout', auth, (req, res, next) => {

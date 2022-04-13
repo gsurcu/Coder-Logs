@@ -1,10 +1,11 @@
 const ContenedorMongoDb = require('../containers/Mongodb.container')
 const { normalize, schema } = require('normalizr')
 const ChatSchema = require('../schemas/Chat.schema')
+const { errorLog } = require('../../middlewares/logger')
 
 const collection = "chat"
 
-class ChatDaoMongoDb extends ContenedorMongoDb {
+class ChatDao extends ContenedorMongoDb {
   constructor() {
     super(collection, ChatSchema)
     this.chatNormalizado = []
@@ -12,7 +13,7 @@ class ChatDaoMongoDb extends ContenedorMongoDb {
 
   async normalizar(){
     try {
-      const data = await this.listarAll()
+      const data = await this.getAll()
       if (!data) {
         return false
       } else {
@@ -44,9 +45,9 @@ class ChatDaoMongoDb extends ContenedorMongoDb {
       }
 
     } catch (error) {
-      console.log(error.message)
+      await errorLog(error.message)
     }
   }
 }
 
-module.exports = ChatDaoMongoDb;
+module.exports = ChatDao;

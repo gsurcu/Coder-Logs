@@ -9,7 +9,8 @@ const ChatSchema = new Schema({
     alias: {type: String},
     avatar: {type: String}
   },
-  text: {type: String}
+  text: {type: String},
+  timestamp: {type: String},
 })
 
 module.exports = ChatSchema;

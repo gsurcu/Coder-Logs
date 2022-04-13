@@ -3,11 +3,11 @@ const CarritosSchema = require('../schemas/Carritos.schema')
 
 const collection = "carritos"
 
-class CarritosDaoMongoDb extends ContenedorMongoDb {
+class CarritosDao extends ContenedorMongoDb {
   constructor() {
     super(collection, CarritosSchema)
   }
 
 }
 
-module.exports = CarritosDaoMongoDb;
+module.exports = CarritosDao;

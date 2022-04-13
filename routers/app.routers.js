@@ -1,21 +1,16 @@
 const express = require('express');
 const apiRoutes = require('./api/api.routes');
 const extraRoutes = require('./extra.routers')
-const { warnLog } = require('../middlewares/logger');
+const { warnLog, infoLog } = require('../middlewares/logger');
 const router = express.Router();
 
 
 //Routes
-// router.use(infoLog)
+router.use(infoLog)
 router.use('/api', apiRoutes);
 
 router.use('/', extraRoutes)
 
-router.use('/*', warnLog, (req, res) => {
-  res.status(404).json({
-    error: -2,
-    descripcion: `La ruta ${req.baseUrl} con el metodo ${req.method} no esta implementado`,
-  });
-});
+router.use('/*', warnLog);
 
 module.exports = router;

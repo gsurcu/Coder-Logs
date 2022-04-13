@@ -5,13 +5,19 @@ const mongoose = require('mongoose');
 const passport = require('./middlewares/passport');
 const cluster = require('cluster')
 const os = require('os')
+const http = require('http')
+const  ChatDao = require('./models/daos/Chat.dao')
 
+const chat = new ChatDao("chat")
 const env = require('./env.config');
 const dbConfig = require('./db/config');
 const apisRoutes = require('./routers/app.routers');
 
 const mode = process.argv[3] == 'cluster';
 const app = express();
+
+const server = http.createServer(app)
+const io = require('socket.io')(server)
 
 // Middlewares
 app.use(express.json());
@@ -49,8 +55,21 @@ if (mode && cluster.isPrimary) {
     cluster.fork()
   })
 } else {
-  const PORT = process.argv[2] || 8080
-  const runningServer = app.listen(PORT, async () => {
+  const PORT = process.argv[2] || 8080;
+  io.on('connection', async (socket) => {
+    emitir()
+    socket.on("incomingMessage", async (message) =>{
+      await chat.createItem(message)
+      emitir()
+    })
+  })
+  
+  const emitir = async () => {
+    const lista = await chat.normalizar()
+    // console.log(lista)
+    io.sockets.emit("chat", lista)
+  }
+  const runningServer = server.listen(PORT, async () => {
     mongoose.connect(dbConfig.mongodb.connectTo('ecommerce'))
     .then(() => {
       console.log('Connected to DB!');
