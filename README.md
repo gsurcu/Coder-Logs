@@ -23,6 +23,7 @@ Para ambas condiciones (con o sin console.log) en la ruta '/info' OBTENER:
 
 1. El perfilamiento del servidor, realizando el test con --prof de node.js. Analizar los resultados obtenidos luego de procesarlos con --prof-process. 
 Utilizaremos como test de carga Artillery en línea de comandos, emulando 50 conexiones concurrentes con 20 request por cada una. Extraer un reporte con los resultados en archivo de texto.
+
 Luego utilizaremos Autocannon en línea de comandos, emulando 100 conexiones concurrentes realizadas en un tiempo de 20 segundos. Extraer un reporte con los resultados (puede ser un print screen de la consola)
 
 2. El perfilamiento del servidor con el modo inspector de node.js --inspect. Revisar el tiempo de los procesos menos performantes sobre el archivo fuente de inspección.
@@ -31,3 +32,22 @@ Luego utilizaremos Autocannon en línea de comandos, emulando 100 conexiones con
 Realizar un informe en formato pdf sobre las pruebas realizadas incluyendo los resultados de todos los test (texto e imágenes). 
 
 Al final incluir la conclusión obtenida a partir del análisis de los datos.
+
+## Analisis
+
+1. node --prof index.js
+node --prof index.js 
+
+cd profiling
+cd artillery
+
+npx artillery quick --count 50 -n 20 http://localhost:8080/info > result_log.txt
+npx artillery quick --count 50 -n 20 http://localhost:8080/info > result_nolog.txt
+
+node --prof-process log-v8.log > result_prof-log.txt
+node --prof-process nolog-v8.log > result_prof-nolog.txt
+
+2. node --inspect index.js
+
+3. node benchmark
+0x index.js

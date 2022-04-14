@@ -13,9 +13,4 @@ const randomNumber = (cant = 1e8) => {
   // console.log(arr)
   return arr
 }
-process.on('message', (data) => {
-  // console.log(data.cant,2)
-  const cant = isNaN(data.cant)? undefined : Number(data.cant)
-  const arr = randomNumber(cant);
-  process.send(arr);
-})
+module.exports = randomNumber;

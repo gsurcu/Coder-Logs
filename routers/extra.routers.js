@@ -2,8 +2,8 @@ const path = require('path');
 const express = require('express');
 const auth = require('../middlewares/auth');
 const infoRoute = require('./info/info.routes');
-const compression = require('compression');
-const ProductsDao = require('../models/daos/Products.dao')
+const ProductsDao = require('../models/daos/Products.dao');
+const comprimir = require('../middlewares/comprimir');
 const PORT = process.argv[2]
 const router = express.Router();
 
@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
   }
 });
 
-router.get('/info', compression(({level:9})), infoRoute)
+router.get('/info', comprimir, infoRoute)
 
 router.get('/datos', (req, res) => {
   console.table({ port: PORT, date: new Date().toISOString()});

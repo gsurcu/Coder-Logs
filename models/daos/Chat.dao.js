@@ -45,7 +45,7 @@ class ChatDao extends ContenedorMongoDb {
       }
 
     } catch (error) {
-      await errorLog(error.message)
+      errorLog(error.message)
     }
   }
 }
